@@ -1,0 +1,38 @@
+backend:
+  name: github
+  repo: DEIN-USERNAME/DEIN-REPO # anpassen!
+  branch: main
+  base_url: https://DEIN-OAUTH-WORKER.workers.dev # dein Cloudflare-Worker-OAuth-Proxy
+
+media_folder: "public/produkte"
+public_folder: "/produkte"
+
+collections:
+  - name: "produkte"
+    label: "Produkte"
+    folder: "src/content/produkte"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Preis", name: "preis", widget: "number", value_type: "float" }
+      - { label: "Währung", name: "waehrung", widget: "string", default: "EUR" }
+      - { label: "Lagerbestand", name: "lagerbestand", widget: "number", default: 1 }
+      - { label: "Spendenanteil (%)", name: "spendenanteilProzent", widget: "number" }
+      - { label: "Stripe Payment Link", name: "stripeLink", widget: "string" }
+      - { label: "Bild", name: "bild", widget: "image", required: false }
+      - { label: "Material", name: "material", widget: "string", required: false }
+      - { label: "Verkauft", name: "verkauft", widget: "boolean", default: false }
+      - { label: "Beschreibung", name: "body", widget: "markdown" }
+
+  - name: "belege"
+    label: "Spendenbelege"
+    folder: "src/content/belege"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-beleg"
+    fields:
+      - { label: "Datum", name: "datum", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Betrag", name: "betrag", widget: "number", value_type: "float" }
+      - { label: "Empfänger", name: "empfaenger", widget: "string" }
+      - { label: "Belegdatei (PDF/Bild, geschwärzt)", name: "belegDatei", widget: "file", required: false }
+      - { label: "Notiz", name: "body", widget: "markdown", required: false }
