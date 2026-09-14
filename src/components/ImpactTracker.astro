@@ -1,0 +1,64 @@
+---
+import spenden from "../data/spenden.json";
+
+const stand = new Date(spenden.letzteAktualisierung).toLocaleDateString("de-DE", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<div class="impact-tracker" data-target={spenden.gesamtGespendet}>
+  <p class="impact-label">Bereits gespendet</p>
+  <p class="impact-value"><span id="impact-count">0</span> €</p>
+  <p class="impact-meta">Stand: {stand} · an {spenden.empfaenger}</p>
+</div>
+
+<style>
+  .impact-tracker {
+    border: 1px solid #dce2d7;
+    border-radius: 12px;
+    padding: 24px 28px;
+    background: #f5f6f2;
+    max-width: 360px;
+  }
+  .impact-label {
+    margin: 0 0 6px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #57635b;
+  }
+  .impact-value {
+    margin: 0 0 8px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #2c4d38;
+  }
+  .impact-meta {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #8a9389;
+  }
+</style>
+
+<script>
+  const el = document.querySelector<HTMLElement>(".impact-tracker");
+  if (el) {
+    const target = parseFloat(el.dataset.target ?? "0");
+    const span = document.getElementById("impact-count");
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now: number) {
+      const p = Math.min(1, (now - start) / duration);
+      if (span) {
+        span.textContent = (target * p).toLocaleString("de-DE", {
+          maximumFractionDigits: 0,
+        });
+      }
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+</script>

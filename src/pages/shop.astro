@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import ProduktKarte from "../components/ProduktKarte.astro";
+import { getCollection } from "astro:content";
+
+const produkte = await getCollection("produkte");
+---
+
+<Base title="Shop — Dein Charity-Shop">
+  <h1>Alle Unikate</h1>
+  <div class="grid">
+    {
+      produkte.map((p) => (
+        <ProduktKarte
+          title={p.data.title}
+          preis={p.data.preis}
+          waehrung={p.data.waehrung}
+          spendenanteilProzent={p.data.spendenanteilProzent}
+          stripeLink={p.data.stripeLink}
+          bild={p.data.bild}
+          verkauft={p.data.verkauft}
+        />
+      ))
+    }
+  </div>
+
+  <style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+  </style>
+</Base>
